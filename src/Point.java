@@ -8,6 +8,7 @@ public class Point {
 		this.y = y;
 	}
 	
+	//accessors
 	public int getX(){
 		return this.x;
 	}
@@ -16,6 +17,7 @@ public class Point {
 		return this.y;
 	}
 	
+	//modifiers
 	public void setX(int i){
 		this.x = i;
 	}
@@ -24,6 +26,7 @@ public class Point {
 		this.x = i;
 	}
 	
+	//add + subtract + compare
 	public Point add (Point p){
 		return new Point(this.getX() + p.getX(), this.getY() + p.getY());
 	}
