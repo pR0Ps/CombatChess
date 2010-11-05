@@ -5,221 +5,265 @@ import java.net.URL;
 import java.util.ArrayList;
 
 
+@SuppressWarnings("unchecked")
 public class PieceData {
 	
 	//returns the valid relative moves for each piece
-	public static ArrayList<Point> pawnMovement(){
-		ArrayList<Point> temp = new ArrayList<Point> (1);
-		temp.add(new Point(0, 1));
-		return temp;
-	}
-	
-	public static ArrayList<Point> rookMovement(){
-		ArrayList<Point> temp = new ArrayList<Point> (24);
-		//up
-		temp.add(new Point(0, 1));
-		temp.add(new Point(0, 2));
-		temp.add(new Point(0, 3));
-		temp.add(new Point(0, 4));
-		temp.add(new Point(0, 5));
-		temp.add(new Point(0, 6));
-		temp.add(new Point(0, 7));
-		//down
-		temp.add(new Point(0, -1));
-		temp.add(new Point(0, -2));
-		temp.add(new Point(0, -3));
-		temp.add(new Point(0, -4));
-		temp.add(new Point(0, -5));
-		temp.add(new Point(0, -6));
-		temp.add(new Point(0, -7));
-		//left
-		temp.add(new Point(-1, 0));
-		temp.add(new Point(-2, 0));
-		temp.add(new Point(-3, 0));
-		temp.add(new Point(-4, 0));
-		temp.add(new Point(-5, 0));
-		temp.add(new Point(-6, 0));
-		temp.add(new Point(-7, 0));
-		//right
-		temp.add(new Point(1, 0));
-		temp.add(new Point(2, 0));
-		temp.add(new Point(3, 0));
-		temp.add(new Point(4, 0));
-		temp.add(new Point(5, 0));
-		temp.add(new Point(6, 0));
-		temp.add(new Point(7, 0));
-		return temp;
-	}
-	
-	public static ArrayList<Point> knightMovement(){
-		ArrayList<Point> temp = new ArrayList<Point> (8);
-		temp.add(new Point(-2, 1));
-		temp.add(new Point(-2, -1));
-		temp.add(new Point(-1, 2));
-		temp.add(new Point(-1, -2));
-		temp.add(new Point(1, 2));
-		temp.add(new Point(1, -2));
-		temp.add(new Point(2, 1));
-		temp.add(new Point(3, -1));
-		return temp;
-	}
-	
-	public static ArrayList<Point> bishopMovement(){
-		ArrayList<Point> temp = new ArrayList<Point> (24);
-		//up-right
-		temp.add(new Point(1, 1));
-		temp.add(new Point(2, 2));
-		temp.add(new Point(3, 3));
-		temp.add(new Point(4, 4));
-		temp.add(new Point(5, 5));
-		temp.add(new Point(6, 6));
-		temp.add(new Point(7, 7));
-		//down-left
-		temp.add(new Point(-1, -1));
-		temp.add(new Point(-2, -2));
-		temp.add(new Point(-3, -3));
-		temp.add(new Point(-4, -4));
-		temp.add(new Point(-6, -5));
-		temp.add(new Point(-7, -6));
-		temp.add(new Point(-8, -7));
-		//down-right
-		temp.add(new Point(-1, 1));
-		temp.add(new Point(-2, 2));
-		temp.add(new Point(-3, 3));
-		temp.add(new Point(-4, 4));
-		temp.add(new Point(-5, 5));
-		temp.add(new Point(-6, 6));
-		temp.add(new Point(-7, 7));
-		//up-right
-		temp.add(new Point(1, -1));
-		temp.add(new Point(2, -2));
-		temp.add(new Point(3, -3));
-		temp.add(new Point(4, -4));
-		temp.add(new Point(5, -5));
-		temp.add(new Point(6, -6));
-		temp.add(new Point(7, -7));
-		return temp;
-	}
-	
-	public static ArrayList<Point> queenMovement(){
-		ArrayList<Point> temp = new ArrayList<Point> (48);
-		//up
-		temp.add(new Point(0, 1));
-		temp.add(new Point(0, 2));
-		temp.add(new Point(0, 3));
-		temp.add(new Point(0, 4));
-		temp.add(new Point(0, 5));
-		temp.add(new Point(0, 6));
-		temp.add(new Point(0, 7));
-		//down
-		temp.add(new Point(0, -1));
-		temp.add(new Point(0, -2));
-		temp.add(new Point(0, -3));
-		temp.add(new Point(0, -4));
-		temp.add(new Point(0, -5));
-		temp.add(new Point(0, -6));
-		temp.add(new Point(0, -7));
-		//left
-		temp.add(new Point(-1, 0));
-		temp.add(new Point(-2, 0));
-		temp.add(new Point(-3, 0));
-		temp.add(new Point(-4, 0));
-		temp.add(new Point(-5, 0));
-		temp.add(new Point(-6, 0));
-		temp.add(new Point(-7, 0));
-		//right
-		temp.add(new Point(1, 0));
-		temp.add(new Point(2, 0));
-		temp.add(new Point(3, 0));
-		temp.add(new Point(4, 0));
-		temp.add(new Point(5, 0));
-		temp.add(new Point(6, 0));
-		temp.add(new Point(7, 0));
-		//up-right
-		temp.add(new Point(1, 1));
-		temp.add(new Point(2, 2));
-		temp.add(new Point(3, 3));
-		temp.add(new Point(4, 4));
-		temp.add(new Point(5, 5));
-		temp.add(new Point(6, 6));
-		temp.add(new Point(7, 7));
-		//down-left
-		temp.add(new Point(-1, -1));
-		temp.add(new Point(-2, -2));
-		temp.add(new Point(-3, -3));
-		temp.add(new Point(-4, -4));
-		temp.add(new Point(-6, -5));
-		temp.add(new Point(-7, -6));
-		temp.add(new Point(-8, -7));
-		//down-right
-		temp.add(new Point(-1, 1));
-		temp.add(new Point(-2, 2));
-		temp.add(new Point(-3, 3));
-		temp.add(new Point(-4, 4));
-		temp.add(new Point(-5, 5));
-		temp.add(new Point(-6, 6));
-		temp.add(new Point(-7, 7));
-		//up-right
-		temp.add(new Point(1, -1));
-		temp.add(new Point(2, -2));
-		temp.add(new Point(3, -3));
-		temp.add(new Point(4, -4));
-		temp.add(new Point(5, -5));
-		temp.add(new Point(6, -6));
-		temp.add(new Point(7, -7));
-		return temp;
-	}
-	
-	public static ArrayList<Point> kingMovement(){
-		ArrayList<Point> temp = new ArrayList<Point> (8);
-		temp.add(new Point(-1, -1));
-		temp.add(new Point(-1, 0));
-		temp.add(new Point(-1, 1));
-		temp.add(new Point(0, -1));
-		temp.add(new Point(0, 1));
-		temp.add(new Point(1, -1));
-		temp.add(new Point(1, 0));
-		temp.add(new Point(1, 1));
-		return temp;
+	public static ArrayList<Point> movement(int type){
+		ArrayList<Point> temp = null;
+		switch (type){
+			case Piece.PAWN:
+				temp = new ArrayList<Point> (1);
+				temp.add(new Point(0, 1));
+				break;
+			case Piece.ROOK:
+				temp = new ArrayList<Point> (24);
+				//up
+				temp.add(new Point(0, 1));
+				temp.add(new Point(0, 2));
+				temp.add(new Point(0, 3));
+				temp.add(new Point(0, 4));
+				temp.add(new Point(0, 5));
+				temp.add(new Point(0, 6));
+				temp.add(new Point(0, 7));
+				//down
+				temp.add(new Point(0, -1));
+				temp.add(new Point(0, -2));
+				temp.add(new Point(0, -3));
+				temp.add(new Point(0, -4));
+				temp.add(new Point(0, -5));
+				temp.add(new Point(0, -6));
+				temp.add(new Point(0, -7));
+				//left
+				temp.add(new Point(-1, 0));
+				temp.add(new Point(-2, 0));
+				temp.add(new Point(-3, 0));
+				temp.add(new Point(-4, 0));
+				temp.add(new Point(-5, 0));
+				temp.add(new Point(-6, 0));
+				temp.add(new Point(-7, 0));
+				//right
+				temp.add(new Point(1, 0));
+				temp.add(new Point(2, 0));
+				temp.add(new Point(3, 0));
+				temp.add(new Point(4, 0));
+				temp.add(new Point(5, 0));
+				temp.add(new Point(6, 0));
+				temp.add(new Point(7, 0));
+				break;
+			case Piece.KNIGHT:
+				temp = new ArrayList<Point> (8);
+				temp.add(new Point(-2, 1));
+				temp.add(new Point(-2, -1));
+				temp.add(new Point(-1, 2));
+				temp.add(new Point(-1, -2));
+				temp.add(new Point(1, 2));
+				temp.add(new Point(1, -2));
+				temp.add(new Point(2, 1));
+				temp.add(new Point(3, -1));
+				break;
+			case Piece.BISHOP:
+				temp = new ArrayList<Point> (24);
+				//up-right
+				temp.add(new Point(1, 1));
+				temp.add(new Point(2, 2));
+				temp.add(new Point(3, 3));
+				temp.add(new Point(4, 4));
+				temp.add(new Point(5, 5));
+				temp.add(new Point(6, 6));
+				temp.add(new Point(7, 7));
+				//down-left
+				temp.add(new Point(-1, -1));
+				temp.add(new Point(-2, -2));
+				temp.add(new Point(-3, -3));
+				temp.add(new Point(-4, -4));
+				temp.add(new Point(-6, -5));
+				temp.add(new Point(-7, -6));
+				temp.add(new Point(-8, -7));
+				//down-right
+				temp.add(new Point(-1, 1));
+				temp.add(new Point(-2, 2));
+				temp.add(new Point(-3, 3));
+				temp.add(new Point(-4, 4));
+				temp.add(new Point(-5, 5));
+				temp.add(new Point(-6, 6));
+				temp.add(new Point(-7, 7));
+				//up-right
+				temp.add(new Point(1, -1));
+				temp.add(new Point(2, -2));
+				temp.add(new Point(3, -3));
+				temp.add(new Point(4, -4));
+				temp.add(new Point(5, -5));
+				temp.add(new Point(6, -6));
+				temp.add(new Point(7, -7));
+				break;
+			case Piece.QUEEN:
+				temp = new ArrayList<Point> (48);
+				//up
+				temp.add(new Point(0, 1));
+				temp.add(new Point(0, 2));
+				temp.add(new Point(0, 3));
+				temp.add(new Point(0, 4));
+				temp.add(new Point(0, 5));
+				temp.add(new Point(0, 6));
+				temp.add(new Point(0, 7));
+				//down
+				temp.add(new Point(0, -1));
+				temp.add(new Point(0, -2));
+				temp.add(new Point(0, -3));
+				temp.add(new Point(0, -4));
+				temp.add(new Point(0, -5));
+				temp.add(new Point(0, -6));
+				temp.add(new Point(0, -7));
+				//left
+				temp.add(new Point(-1, 0));
+				temp.add(new Point(-2, 0));
+				temp.add(new Point(-3, 0));
+				temp.add(new Point(-4, 0));
+				temp.add(new Point(-5, 0));
+				temp.add(new Point(-6, 0));
+				temp.add(new Point(-7, 0));
+				//right
+				temp.add(new Point(1, 0));
+				temp.add(new Point(2, 0));
+				temp.add(new Point(3, 0));
+				temp.add(new Point(4, 0));
+				temp.add(new Point(5, 0));
+				temp.add(new Point(6, 0));
+				temp.add(new Point(7, 0));
+				//up-right
+				temp.add(new Point(1, 1));
+				temp.add(new Point(2, 2));
+				temp.add(new Point(3, 3));
+				temp.add(new Point(4, 4));
+				temp.add(new Point(5, 5));
+				temp.add(new Point(6, 6));
+				temp.add(new Point(7, 7));
+				//down-left
+				temp.add(new Point(-1, -1));
+				temp.add(new Point(-2, -2));
+				temp.add(new Point(-3, -3));
+				temp.add(new Point(-4, -4));
+				temp.add(new Point(-6, -5));
+				temp.add(new Point(-7, -6));
+				temp.add(new Point(-8, -7));
+				//down-right
+				temp.add(new Point(-1, 1));
+				temp.add(new Point(-2, 2));
+				temp.add(new Point(-3, 3));
+				temp.add(new Point(-4, 4));
+				temp.add(new Point(-5, 5));
+				temp.add(new Point(-6, 6));
+				temp.add(new Point(-7, 7));
+				//up-right
+				temp.add(new Point(1, -1));
+				temp.add(new Point(2, -2));
+				temp.add(new Point(3, -3));
+				temp.add(new Point(4, -4));
+				temp.add(new Point(5, -5));
+				temp.add(new Point(6, -6));
+				temp.add(new Point(7, -7));
+				break;
+			case Piece.KING:
+				temp = new ArrayList<Point> (8);
+				temp.add(new Point(-1, -1));
+				temp.add(new Point(-1, 0));
+				temp.add(new Point(-1, 1));
+				temp.add(new Point(0, -1));
+				temp.add(new Point(0, 1));
+				temp.add(new Point(1, -1));
+				temp.add(new Point(1, 0));
+				temp.add(new Point(1, 1));
+				break;
+		}
+		return (ArrayList<Point>) temp.clone();
 	}
 	
 	//returns the images for each piece
-	public static Image[] pawnImage(){
-		return new Image[] {getImage ("rsc/pawn_w.png"), getImage ("rsc/pawn_b.png")};
-	}
-	
-	public static Image[] rookImage(){
-		return new Image[] {getImage ("rsc/rook_w.png"), getImage ("rsc/rook_b.png")};
-	}
-	
-	public static Image[] knightImage(){
-		return new Image[] {getImage ("rsc/knight_w.png"), getImage ("rsc/knight_b.png")};
-	}
-	
-	public static Image[] bishopImage(){
-		return new Image[] {getImage ("rsc/bishop_w.png"), getImage ("rsc/bishop_b.png")};
-	}
-	
-	public static Image[] queenImage(){
-		return new Image[] {getImage ("rsc/queen_w.png"), getImage ("rsc/queen_b.png")};
-	}
-	
-	public static Image[] kingImage(){
-		return new Image[] {getImage ("rsc/king_w.png"), getImage ("rsc/king_b.png")};
-	}
-	
-	//loads the image from the file
-	private static Image getImage(String path){
+	public static Image image(int type, int player){
+		String s = "rsc/";
+		switch (type){
+			case Piece.PAWN:
+				s += "pawn_";
+				break;
+			case Piece.ROOK:
+				s += "rook_";
+				break;
+			case Piece.KNIGHT:
+				s += "knight_";
+				break;
+			case Piece.BISHOP:
+				s += "bishop_";
+				break;
+			case Piece.QUEEN:
+				s += "queen_";
+				break;
+			case Piece.KING:
+				s += "king_";
+				break;
+			default:
+				return null;
+		}
+		switch (player){
+			case 1:
+				s += "w.png";
+				break;
+			case 2:
+				s += "b.png";
+				break;
+			default:
+				return null;
+		}
 		try{
 			Toolkit tk = Toolkit.getDefaultToolkit();
-			URL url = PieceData.class.getResource(path);
+			URL url = PieceData.class.getResource(s);
 			Image img = tk.createImage(url);
 			tk.prepareImage(img, -1, -1, null);
 			return img;
 		}
 		catch (Exception e) {
-			//not found, generate replacement
+			//not found/other error, generate stand-in
 			return (Image) new BufferedImage (20, 29, BufferedImage.TYPE_INT_RGB);
+		}
+	}
+	
+	//returns the max health of the piece
+	public static int maxHealth (int type){
+		switch (type){
+			case Piece.PAWN:
+				return 70;
+			case Piece.ROOK:
+				return 500;
+			case Piece.KNIGHT:
+				return 150;
+			case Piece.BISHOP:
+				return 200;
+			case Piece.QUEEN:
+				return 500;
+			case Piece.KING:
+				return 1500;
+			default:
+				return 0;
+		}
+	}
+
+	//returns the attack of the piece
+	public static int attack (int type){
+		switch (type){
+			case Piece.PAWN:
+				return 30;
+			case Piece.ROOK:
+				return 50;
+			case Piece.KNIGHT:
+				return 50;
+			case Piece.BISHOP:
+				return 40;
+			case Piece.QUEEN:
+				return 80;
+			case Piece.KING:
+				return 40;
+			default:
+				return 0;
 		}
 	}
 }
