@@ -51,4 +51,8 @@ public class Point {
 	public Object clone(){
 		return new Point (this.x, this.y);
 	}
+	
+	public String toString(){
+		return "X: " + this.x + ", Y: " + this.y;
+	}
 }

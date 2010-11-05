@@ -223,7 +223,7 @@ public class PieceData {
 		}
 		catch (Exception e) {
 			//not found/other error, generate stand-in
-			return (Image) new BufferedImage (20, 29, BufferedImage.TYPE_INT_RGB);
+			return (Image) new BufferedImage (50, 50, BufferedImage.TYPE_INT_RGB);
 		}
 	}
 	
