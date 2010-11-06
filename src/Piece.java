@@ -1,7 +1,6 @@
 import java.awt.Image;
 import java.util.ArrayList;
 
-@SuppressWarnings("unchecked")
 public class Piece {
 	
 	public static final int PAWN = 1;
@@ -34,7 +33,7 @@ public class Piece {
 		this.maxHealth = PieceData.maxHealth(type);
 		this.curHealth = curHealth;
 		this.attack = PieceData.attack(type);
-		this.moves = PieceData.movement(type);
+		this.moves = PieceData.movement(type, player);
 		this.player = player;
 		this.curPos = (Point) curPos.clone();
 		this.image = PieceData.image(type, player);
@@ -50,40 +49,54 @@ public class Piece {
 	public int getMaxHealth(){
 		return this.maxHealth;
 	}
+	
 	public int getCurrentHealth(){
 		return this.curHealth;
 	}
+	
 	public double getPercentageHealth(){
 		return this.curHealth/this.maxHealth;
 	}
+	
 	public int getAttack(){
 		return this.attack;
 	}
+	
+	@SuppressWarnings("unchecked")
 	public ArrayList<Point> getMoves(){
 		return (ArrayList<Point>) this.moves.clone();
 	}
+	
 	public Point getPos(){
 		return this.curPos;
 	}
+	
 	public boolean isDead(){
 		return this.curHealth <= 0;
 	}
+	
 	public int getPlayer(){
 		return this.player;
 	}
+	
 	public Image getImage(){
 		return image;
 	}
 	
+	public int getType(){
+		return this.type;
+	}
 	
 	//valid position on board
-	private boolean validPos(Point p){
-		return p.getX() < 8  && p.getX() > -1 && p.getY() < 8 && p.getX() > -1;
+	public static boolean validPos(Point p){
+		return p.getX() < 8  && p.getX() >= 0 && p.getY() < 8 && p.getY() >= 0;
 	}
+	
 	//relative move
 	public boolean validRelMove(Point p){
 		return validAbsMove(this.getPos().add(p));
 	}
+	
 	//absolute position/move
 	public boolean validAbsMove(Point p){
 		return this.moves.contains(p.subtract(this.getPos())) && validPos(p);
@@ -94,18 +107,22 @@ public class Piece {
 	public void setPos (int x, int y) throws Exception{
 		this.setPos(new Point (x, y));
 	}
+	
 	public void setPos (Point p) throws Exception{
 		if (!validPos(p)){
 			throw new Exception ("Invalid starting position supplied");
 		}
 		this.curPos = p;
 	}
+	
 	public void setHealth (int h){
 		this.curHealth = h;
 	}
+	
 	public void doDamage (int d){
 		this.curHealth = this.curHealth - d;
 	}
+	
 	public void doHeal (int h){
 		this.curHealth = this.curHealth + h;
 	}
@@ -117,5 +134,9 @@ public class Piece {
 			//will never happen
 			return null;
 		}
+	}
+	
+	public String toString(){
+		return "Type: " + PieceData.typeToString(this.type) + " || Attack: " + this.attack + " || Max Health: " + this.maxHealth + " || Current Health: " + this.curHealth;
 	}
 }

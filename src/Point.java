@@ -7,6 +7,9 @@ public class Point {
 		this.x = x;
 		this.y = y;
 	}
+	public Point (){
+		this (0, 0);
+	}
 	
 	//accessors
 	public int getX(){
@@ -26,7 +29,7 @@ public class Point {
 		this.x = i;
 	}
 	
-	//inter-piece relations
+	//inter-point relations
 	public Point add (Point p){
 		return new Point(this.getX() + p.getX(), this.getY() + p.getY());
 	}
@@ -43,11 +46,12 @@ public class Point {
 		return false;
 	}
 	
-	//were only doing comparison to a known value, no need to work with square roots
+	//we're only doing comparison to a known value, no need to work with square roots
 	public double distSquared (Point p){
 		return Math.pow(p.getX() - this.getX(), 2) + Math.pow(p.getY() - this.getY(), 2);
 	}
 	
+	//standard object methods
 	public Object clone(){
 		return new Point (this.x, this.y);
 	}
