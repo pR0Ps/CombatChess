@@ -48,14 +48,18 @@ public class CombatChess extends JFrame {
 	private final char[] LEFT = {'a', 'j'};
 	private final char[] RIGHT = {'d', 'l'};
 	private final char[] ACTION = {'q', 'u'};
+	private final char[] BACK = {'e', 'o'};
 	
 	//selected piece
 	private Point[] selPoint = new Point[2];
 	//current point;
 	private Point[] curPoint = new Point[2];
+	//used for undo
+	private Piece lastMove;
+	private boolean didAction;
 	
 	public CombatChess (){
-		super ("Combat Chess");
+		super ("Combat Chess || Carey Metcalfe");
 		super.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		super.setLayout (new BorderLayout());
 		super.setResizable(false);
@@ -63,8 +67,6 @@ public class CombatChess extends JFrame {
 		//attempt to adapt to the operating system's look
 		try {UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());}
 		catch (Exception e) {} //shit son, you get the crappy Java UI ;)
-		
-		//TODO: set up game mechanics
 		
 		//set up the labels
 		turnLabel = new JLabel ("Combat Chess");
@@ -78,6 +80,7 @@ public class CombatChess extends JFrame {
 				int tempIndex;
 				Point tempPoint;
 				int tempState;
+				
 				//for both players
 				for (int i = 0 ; i < 2 ; i++){
 					//movement
@@ -89,19 +92,39 @@ public class CombatChess extends JFrame {
 					if (Piece.validPos(tempPoint)){
 						curPoint[i] = (Point) tempPoint.clone();
 					}
-					if (pieceIndex(curPoint[i])!= -1){
+					if (pieceIndex(curPoint[i]) != -1){
 						infoText[i] = pieces.get(pieceIndex(curPoint[i])).toString();
 					}
 					
-					//selection
-					if (e.getKeyChar() == ACTION[i]){
-						if (turn - 1 == i){
+					//selection and deselection
+					if (turn - 1 == i){
+						//deselection
+						if (e.getKeyChar() == BACK[i]){
+							if (state == 1){
+								selPoint[i] = null;
+								state = 0;
+								infoText[i] = "Piece deselected. Entering view phase.";
+							}
+							else if (state == 2 && lastMove != null){
+								tempIndex = pieceIndex(selPoint[i]);
+								pieces.remove(tempIndex);
+								pieces.add((Piece) lastMove.clone());
+								selPoint[i] = null;
+								state = 0;
+								infoText[i] = "Piece reset and deselected. Entering view phase.";
+							}
+						}
+						//selection
+						else if (e.getKeyChar() == ACTION[i]){
 							//its the right players turn
 							switch (state){
 							case 0: //view
 								tempIndex = pieceIndex(curPoint[i]);
 								if (tempIndex != -1 && pieces.get(tempIndex).getPlayer() == turn){
-									//piece exists, select it, change state to move
+									//piece exists
+									//back up and set up didAction flag
+									lastMove = (Piece) pieces.get(tempIndex).clone();
+									didAction = false;
 									selPoint[i] = (Point) curPoint[i].clone();
 									infoText[i] = "Selected piece! Entering movement phase.";
 									state += 1;
@@ -110,12 +133,12 @@ public class CombatChess extends JFrame {
 								break;
 							case 1: //move
 								if (selPoint[i].equals(curPoint[i])){
-									selPoint[i] = null;
-									infoText[i] = "Piece deselected. Entering view phase.";
-									state -= 1;
+									infoText[i] = "Piece not moved. Entering attack phase.";
+									state += 1;
 								}
 								else if (movePieceTo(selPoint[i], curPoint[i])){
 									infoText[i] = "Moved piece! Entering attack phase.";
+									didAction = true;
 									selPoint[i] = (Point) curPoint[i].clone();
 									state += 1;
 								}
@@ -128,6 +151,7 @@ public class CombatChess extends JFrame {
 									//valid move
 									if (tempState != 0){
 										//didnt hit self
+										didAction = true;
 										if (tempState != 1){
 											//did damage
 											infoText[i] = "Attacked target. " + (tempState == 3 ? "Critical hit!" : "");
@@ -140,6 +164,10 @@ public class CombatChess extends JFrame {
 										}
 										else infoText[i] = "You missed!";
 									}
+									else if (didAction == false){
+										infoText[i] = "You must move and/or attack on your turn.";
+										break;
+									}
 									else infoText[i] = "You didn't attack.";
 									
 									//end turn
@@ -148,13 +176,14 @@ public class CombatChess extends JFrame {
 									if (turn == 1) turn = 2;
 									else turn = 1;
 									infoText[i] += " Your turn has ended.";
+									lastMove = null;
 								}
 								else infoText[i] = "Invalid attack. Try another space.";
 								break;
 							}
 						}
-						else infoText[i] = "It's not your turn!";
 					}
+					//else infoText[i] = "It's not your turn!";
 				}
 				turnLabel.setText("It is Player " + turn + "'s turn. (Phase: " + stateNames[state] + ")");
 				infoLabel.setText("<html>Player 1: " + infoText[0] + "<br>Player 2: " + infoText[1] + "</html>");
@@ -197,12 +226,20 @@ public class CombatChess extends JFrame {
 								"Each piece has a certain amount of health, attack power, defensive power, etc.\n" +
 								"Only when a pieces' health has been depleated will it be removed from the game board.\n" +
 								"Each turn you will get a movement phase and an attack phase.\n" +
-								"Use your movement phase to position your piece beside an enemy piece and your attack phase to attack.\n" +
-								"Some things to remember:\n\n" +
+								"Use your movement phase to position your piece beside an enemy piece and your attack phase to attack.\n\n" +
+								"Some things to remember:\n" +
+								"-To not move or not attack, simply select the piece you are working with and click on it again.\n" +
+								"-You connot forfit your turn, you must move and/or attack a piece.\n" +
 								"-Be careful, most pieces will take more than one hit to go down.\n" +
-								"-An attack can come from any square next to a piece, including diagonals.\n" +
+								"-An attack can be made on a piece in any square next to the attacking piece, including diagonals.\n" +
 								"-Not every attack is a guarenteed hit, you will miss sometimes.\n" +
-								"-Attacks have a slight chance to do critical damage (1.5x)." +
+								"-Attacks have a slight chance to do critical damage (1.5x).\n\n" +
+								"Controls:\n" +
+								"Movement = 'wasd' (player 1) and 'ijkl' (player 2)\n" +
+								"Action button = 'q' (player 1) and 'u' (player 2)\n" +
+								"Back button = 'e' (player 1) and 'o' (player 2)\n" +
+								"The action button selects, moves and attacks pieces\n" +
+								"The back button resets the board to the beginning of your turn." +
 								"", "Instructions", JOptionPane.PLAIN_MESSAGE);
 					}
 				});
@@ -211,7 +248,7 @@ public class CombatChess extends JFrame {
 				JMenuItem aboutItem = new JMenuItem("About");
 				aboutItem.addActionListener(new ActionListener (){
 					public void actionPerformed(ActionEvent arg0) {
-						JOptionPane.showMessageDialog(null, "This game was developed for the QGDC Game in a Week challenge", "About", JOptionPane.PLAIN_MESSAGE);
+						JOptionPane.showMessageDialog(null, "This game was developed for the QGDC Game in a Week challenge.\nCreated by Carey Metcalfe", "About", JOptionPane.PLAIN_MESSAGE);
 					}
 				});
 				helpMenu.add(aboutItem);

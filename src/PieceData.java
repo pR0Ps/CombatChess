@@ -60,7 +60,7 @@ public class PieceData {
 			temp.add(new Point(-1, -2));
 			temp.add(new Point(1, 2));
 			temp.add(new Point(1, -2));
-			temp.add(new Point(2, 1));
+			temp.add(new Point(2, -1));
 			temp.add(new Point(3, -1));
 			break;
 		case Piece.BISHOP:
