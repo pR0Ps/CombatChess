@@ -103,6 +103,7 @@ public class CombatChess extends JFrame {
 							if (state == 1){
 								selPoint[i] = null;
 								state = 0;
+								gamePanel.setFocus(null);
 								infoText[i] = "Piece deselected. Entering view phase.";
 							}
 							else if (state == 2 && lastMove != null){
@@ -111,6 +112,7 @@ public class CombatChess extends JFrame {
 								pieces.add((Piece) lastMove.clone());
 								selPoint[i] = null;
 								state = 0;
+								gamePanel.setFocus(null);
 								infoText[i] = "Piece reset and deselected. Entering view phase.";
 							}
 						}
@@ -126,6 +128,7 @@ public class CombatChess extends JFrame {
 									lastMove = (Piece) pieces.get(tempIndex).clone();
 									didAction = false;
 									selPoint[i] = (Point) curPoint[i].clone();
+									gamePanel.setFocus(selPoint[i]);
 									infoText[i] = "Selected piece! Entering movement phase.";
 									state += 1;
 								}
@@ -134,12 +137,14 @@ public class CombatChess extends JFrame {
 							case 1: //move
 								if (selPoint[i].equals(curPoint[i])){
 									infoText[i] = "Piece not moved. Entering attack phase.";
+									gamePanel.setFocus(selPoint[i]);
 									state += 1;
 								}
 								else if (movePieceTo(selPoint[i], curPoint[i])){
 									infoText[i] = "Moved piece! Entering attack phase.";
 									didAction = true;
 									selPoint[i] = (Point) curPoint[i].clone();
+									gamePanel.setFocus(selPoint[i]);
 									state += 1;
 								}
 								else infoText[i] = "Invalid move. Try another space.";
@@ -168,9 +173,12 @@ public class CombatChess extends JFrame {
 										infoText[i] = "You must move and/or attack on your turn.";
 										break;
 									}
-									else infoText[i] = "You didn't attack.";
+									else{
+										infoText[i] = "You didn't attack.";
+									}
 									
 									//end turn
+									gamePanel.setFocus(null);
 									selPoint[i] = null;
 									state = 0;
 									if (turn == 1) turn = 2;
@@ -229,7 +237,7 @@ public class CombatChess extends JFrame {
 								"Use your movement phase to position your piece beside an enemy piece and your attack phase to attack.\n\n" +
 								"Some things to remember:\n" +
 								"-To not move or not attack, simply select the piece you are working with and click on it again.\n" +
-								"-You connot forfit your turn, you must move and/or attack a piece.\n" +
+								"-You cannot forfit your turn, you must move and/or attack a piece.\n" +
 								"-Be careful, most pieces will take more than one hit to go down.\n" +
 								"-An attack can be made on a piece in any square next to the attacking piece, including diagonals.\n" +
 								"-Not every attack is a guarenteed hit, you will miss sometimes.\n" +
@@ -409,9 +417,11 @@ public class CombatChess extends JFrame {
 		private final Color BOARD_LIGHT = new Color (209, 139, 71);
 		private final Color[] SEL_PIECE = {Color.RED, Color.BLUE};
 		private final Color[] CUR_POINT = {Color.RED, Color.BLUE};
+		private final Color FOCUS = Color.BLACK;
 		private final int SPACE_SIZE = 50;
 		
-		BufferedImage board;
+		private Point focusPoint = null;
+		private BufferedImage board;
 		
 		public GamePanel(){
 			super.setPreferredSize(new Dimension (SPACE_SIZE * 8, SPACE_SIZE * 8));
@@ -434,29 +444,62 @@ public class CombatChess extends JFrame {
 			}
 		}
 		
+		//set the focus point
+		public void setFocus (Point p){
+			if (p != null) this.focusPoint = (Point) p.clone();
+			else this.focusPoint = null;
+		}
+		
+		//draw the selection point for the player
+		private void drawSel(Graphics g, int player){
+			//draw selection boxes
+			if (selPoint[player] != null){
+				g.setColor(SEL_PIECE[player]);
+				for (int j = 0 ; j < 5 ; j++){
+					g.drawRect(selPoint[player].getX() * SPACE_SIZE + j, (7 - selPoint[player].getY()) * SPACE_SIZE + j, SPACE_SIZE - j*2, SPACE_SIZE - j*2);
+				}
+			}
+			if (curPoint[player] != null){
+				g.setColor(CUR_POINT[player]);
+				for (int j = 0 ; j < 5 ; j++){
+					g.drawRect(curPoint[player].getX() * SPACE_SIZE + j, (7 - curPoint[player].getY()) * SPACE_SIZE + j, SPACE_SIZE - j*2, SPACE_SIZE - j*2);
+				}
+			}
+		}
+		
+		//draw the focus point
+		private void drawFocus (Graphics g){
+			if (this.focusPoint != null){
+				g.setColor(FOCUS);
+				for (int j = 0 ; j < 5 ; j++){
+					g.drawRect(this.focusPoint.getX() * SPACE_SIZE + j, (7 - this.focusPoint.getY()) * SPACE_SIZE + j, SPACE_SIZE - j*2, SPACE_SIZE - j*2);
+				}
+			}
+		}
+		
+		//draw the pieces
+		private void drawPieces(Graphics g){
+			for (Piece p : pieces){
+				g.drawImage(p.getImage(), p.getPos().getX() * SPACE_SIZE, (7-p.getPos().getY()) * SPACE_SIZE, null);
+			}
+		}
+		
 		public void paintComponent(Graphics g) {
 			//draw board
 			g.drawImage(this.board, 0, 0, null);
 			if (gameStarted){
 				//draw pieces
-				for (Piece p : pieces){
-					g.drawImage(p.getImage(), p.getPos().getX() * SPACE_SIZE, (7-p.getPos().getY()) * SPACE_SIZE, null);
-				}
+				drawPieces(g);
 				//draw selection boxes
-				for (int i = 0 ; i < 2 ; i++){
-					if (selPoint[i] != null){
-						g.setColor(SEL_PIECE[i]);
-						for (int j = 0 ; j < 5 ; j++){
-							g.drawRect(selPoint[i].getX() * SPACE_SIZE + j, (7 - selPoint[i].getY()) * SPACE_SIZE + j, SPACE_SIZE - j*2, SPACE_SIZE - j*2);
-						}
-					}
-					if (curPoint[i] != null){
-						g.setColor(CUR_POINT[i]);
-						for (int j = 0 ; j < 5 ; j++){
-							g.drawRect(curPoint[i].getX() * SPACE_SIZE + j, (7 - curPoint[i].getY()) * SPACE_SIZE + j, SPACE_SIZE - j*2, SPACE_SIZE - j*2);
-						}
-					}
+				if (curPoint[0] != null && curPoint[1] != null && curPoint[0].equals(curPoint[1])){
+					drawSel(g, turn - 1);
 				}
+				else{
+					drawSel(g, 0);
+					drawSel(g, 1);
+				}
+				//focus point
+				drawFocus(g);
 			}
 		}
 	}
