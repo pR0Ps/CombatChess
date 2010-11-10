@@ -55,7 +55,7 @@ public class Piece {
 	}
 	
 	public double getPercentageHealth(){
-		return this.curHealth/this.maxHealth;
+		return Math.round((double) this.curHealth/this.maxHealth * 10000)/100;
 	}
 	
 	public int getAttack(){
