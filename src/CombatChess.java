@@ -65,6 +65,7 @@ public class CombatChess extends JFrame {
 		super.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		super.setLayout (new BorderLayout());
 		super.setResizable(false);
+		PieceData.initImages(); //load all the images into memory;
 
 		//attempt to adapt to the operating system's look
 		try {UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());}
@@ -312,8 +313,6 @@ public class CombatChess extends JFrame {
 		curPoint[1] = new Point (4, 7);
 		selPoint[0] = null;
 		selPoint[1] = null;
-
-		Thread.sleep(100); //wait for the images to be loaded
 
 		gameStarted = true;
 		gamePanel.repaint();

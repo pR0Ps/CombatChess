@@ -7,6 +7,12 @@ import java.util.ArrayList;
 
 public class PieceData {
 
+	//local arrays
+	private static Image[][] pieceImages = null; 
+	private static String[] names = {"Pawn", "Rook", "Knight", "Bishop", "Queen", "King"};
+	private static int[] attack = {30, 50, 50, 40, 80, 40};
+	private static int[] maxHealth = {70, 500, 150, 200, 500, 1500};
+	
 	//returns the valid relative moves for each piece
 	@SuppressWarnings("unchecked")
 	public static ArrayList<Point> movement(int type, int player){
@@ -180,110 +186,64 @@ public class PieceData {
 		return (ArrayList<Point>) temp.clone();
 	}
 
+	//loads the images into memory
+	public static void initImages(){
+		pieceImages = new Image[2][6];
+		String[][] filenames = {{"pawn_w.png", "rook_w.png", "knight_w.png", "bishop_w.png", "queen_w.png", "king_w.png"}, {"pawn_b.png", "rook_b.png", "knight_b.png", "bishop_b.png", "queen_b.png", "king_b.png"}};
+		for (int i = 0 ; i < 2 ; i++){
+			for (int j = 0 ; j < 6 ; j++){
+				try{
+					Toolkit tk = Toolkit.getDefaultToolkit();
+					URL url = PieceData.class.getResource("rsc/" + filenames[i][j]);
+					Image img = tk.createImage(url);
+					tk.prepareImage(img, -1, -1, null);
+					pieceImages[i][j] = img;
+				}
+				catch (Exception e) {
+					//not found/other error, generate stand-in
+					pieceImages[i][j] = (Image) new BufferedImage (50, 50, BufferedImage.TYPE_INT_RGB);
+				}
+			}
+		}
+	}
+	
 	//returns the images for each piece
 	public static Image image(int type, int player){
-		String s = "rsc/";
-		switch (type){
-		case Piece.PAWN:
-			s += "pawn_";
-			break;
-		case Piece.ROOK:
-			s += "rook_";
-			break;
-		case Piece.KNIGHT:
-			s += "knight_";
-			break;
-		case Piece.BISHOP:
-			s += "bishop_";
-			break;
-		case Piece.QUEEN:
-			s += "queen_";
-			break;
-		case Piece.KING:
-			s += "king_";
-			break;
-		default:
-			return null;
-		}
-		switch (player){
-		case 1:
-			s += "w.png";
-			break;
-		case 2:
-			s += "b.png";
-			break;
-		default:
-			return null;
-		}
+		if (pieceImages == null) initImages();
 		try{
-			Toolkit tk = Toolkit.getDefaultToolkit();
-			URL url = PieceData.class.getResource(s);
-			Image img = tk.createImage(url);
-			tk.prepareImage(img, -1, -1, null);
-			return img;
+			return pieceImages[player - 1][type - 1];
 		}
-		catch (Exception e) {
-			//not found/other error, generate stand-in
+		catch (Exception e){
 			return (Image) new BufferedImage (50, 50, BufferedImage.TYPE_INT_RGB);
 		}
 	}
 
 	//returns the max health of the piece
 	public static int maxHealth (int type){
-		switch (type){
-		case Piece.PAWN:
-			return 70;
-		case Piece.ROOK:
-			return 500;
-		case Piece.KNIGHT:
-			return 150;
-		case Piece.BISHOP:
-			return 200;
-		case Piece.QUEEN:
-			return 500;
-		case Piece.KING:
-			return 1500;
-		default:
-			return 0;
+		try{
+			return maxHealth[type - 1];
+		}
+		catch (Exception e){
+			return -1;
 		}
 	}
 
 	//returns the attack of the piece
 	public static int attack (int type){
-		switch (type){
-		case Piece.PAWN:
-			return 30;
-		case Piece.ROOK:
-			return 50;
-		case Piece.KNIGHT:
-			return 50;
-		case Piece.BISHOP:
-			return 40;
-		case Piece.QUEEN:
-			return 80;
-		case Piece.KING:
-			return 40;
-		default:
-			return 0;
+		try{
+			return attack[type -1];
+		}
+		catch (Exception e){
+			return -1;
 		}
 	}
 
 	//returns a string representing the type
 	public static String typeToString (int type){
-		switch (type){
-		case Piece.PAWN:
-			return "Pawn";
-		case Piece.ROOK:
-			return "Rook";
-		case Piece.KNIGHT:
-			return "Knight";
-		case Piece.BISHOP:
-			return "Bishop";
-		case Piece.QUEEN:
-			return "Queen";
-		case Piece.KING:
-			return "King";
-		default:
+		try{
+			return names[type -1];
+		}
+		catch (Exception e){
 			return "N/A";
 		}
 	}
